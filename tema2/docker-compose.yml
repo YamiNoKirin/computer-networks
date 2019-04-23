@@ -13,6 +13,7 @@ services:
         tty: true
         networks:
             - dmz
+        command: bash -c "python /elocal/src/udp_client.py -s tm2 -p 20 --mesaj Hi"
     tm2:
         build:
             context: docker
@@ -23,6 +24,6 @@ services:
         tty: true
         networks:
             - dmz
-
+        command: bash -c "tcpdump -i any -vvv -nn ip and udp & python /elocal/src/udp_server.py -p 20"
 networks:
     dmz: {}
