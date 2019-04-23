@@ -13,7 +13,7 @@ services:
         tty: true
         networks:
             - dmz
-        command: bash -c "python /elocal/src/udp_client.py -s tm2 -p 20 --mesaj Hi"
+        command: bash -c "python /elocal/src/udp_client.py -s tm2 -p 20 --mesaj asdiowh738gohj-f;"
     tm2:
         build:
             context: docker
