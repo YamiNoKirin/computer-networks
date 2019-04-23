@@ -14,4 +14,4 @@ RUN mv /usr/sbin/tcpdump /usr/local/bin
 ENV PATH="/usr/local/bin:${PATH}"
 
 RUN pip install scapy
-
+# RUN ethtool --offload eth0 rx off tx off

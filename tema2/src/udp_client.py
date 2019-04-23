@@ -2,6 +2,9 @@
 import socket
 import logging
 import argparse
+import util
+import struct
+import re
 
 logging.basicConfig(format = u'[LINE:%(lineno)d]# %(levelname)-8s [%(asctime)s]  %(message)s', level = logging.NOTSET)
 
@@ -13,9 +16,14 @@ def send_message(address, message):
         sock.sendto(message.encode('utf-8'), address)
 
         logging.info('Asteptam un raspuns...')
-        data, server = sock.recvfrom(4096)
-        logging.info('Content primit: "%s"', data)
+        full_data, server = sock.recvfrom(4096)
+        logging.info('Content primit: "%s"', full_data)
 
+        client_port, _ = re.split(r' ', full_data)
+        client_ip = socket.gethostbyname(socket.gethostname())
+        mesaj_binar = util.construieste_mesaj_raw(server[0], client_ip, server[1], int(client_port), full_data)
+        valoare_numerica = util.calculeaza_checksum(mesaj_binar)
+        logging.info('Checksum calculat: %s', str(hex(valoare_numerica)))
     finally:
         logging.info('closing socket')
         sock.close()

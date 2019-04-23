@@ -2,22 +2,11 @@
 import socket
 import logging
 import argparse
+import struct
+import util
 
-from util import construieste_mesaj_raw
 
 logging.basicConfig(format = u'[LINE:%(lineno)d]# %(levelname)-8s [%(asctime)s]  %(message)s', level = logging.NOTSET)
-
-
-
-def calculeaza_checksum(mesaj_binar):
-    '''
-        TODO: scrieti o functie care primeste un mesaj raw de bytes
-        si calculeaza checksum pentru UDP
-        exemplu de calcul aici:
-        https://www.securitynik.com/2015/08/calculating-udp-checksum-with-taste-of.html
-    '''
-    pass
-
 
 
 def run_server(server_address):
@@ -31,11 +20,13 @@ def run_server(server_address):
         
         logging.info("Am primit %s octeti de la %s", len(data), address)
         logging.info('Content primit: "%s"', data)
-        mesaj_binar = construieste_mesaj_raw(address[0], server_address[0], address[1], server_address[1], data)
-        valoare_numerica = calculeaza_checksum(mesaj_binar)
+        mesaj_binar = util.construieste_mesaj_raw(address[0], server_address[0], address[1], server_address[1], data)
+        # mesaj_binar = construieste_mesaj_raw('192.168.0.31', '192.168.0.30', 20, 10, 'Hi')
+
+        valoare_numerica = util.calculeaza_checksum(mesaj_binar)
         valoare = hex(valoare_numerica)
         logging.info('Checksum calculat: %s', str(valoare))
-        sock.sendto(str(valoare), address)
+        sock.sendto(str(address[1]) + ' ' + str(valoare), address)
         
 
 def main():
