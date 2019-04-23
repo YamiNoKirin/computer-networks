@@ -134,13 +134,19 @@ def calculeaza_checksum(mesaj_binar):
         num1 = struct.unpack('!B', mesaj_binar[i])[0]
         num = num0 * 256 + num1
         checksum += num
+
+    if mesaj_len % 2 == 1:
+        # Linkul cu documentatia scrie ca trebuie adunat ca fiind 1B, nu 2B, dar tcpdump da corect asa
+        # Pentru a fi in conformitate cu docs, scoateti * 256
+        checksum += struct.unpack('!B', mesaj_binar[mesaj_len - 1])[0] * 256
     
-    if checksum >= byte_lessthan:
+
+    while checksum >= byte_lessthan:
         checksum = checksum % byte_lessthan + checksum / byte_lessthan;
 
     # Complement
     checksum ^= byte_lessthan - 1
-    checksum &= byte_lessthan - 1
+    # logging.info("chksm: %s", hex(checksum))
     return checksum
 
 
