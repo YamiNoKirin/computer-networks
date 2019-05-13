@@ -1,0 +1,29 @@
+version: '2.1'
+
+services:
+    client:
+        build:
+            context: docker
+            dockerfile: dockerfile 
+        privileged: true
+        depends_on:
+            - "server"
+        volumes:
+            - .:/elocal
+        tty: true
+        networks:
+            - dmz
+        command: bash
+    server:
+        build:
+            context: docker
+            dockerfile: dockerfile 
+        privileged: true
+        volumes:
+            - .:/elocal
+        tty: true
+        networks:
+            - dmz
+        command: bash -c "tcpdump -i any -vvv -nn ip and udp" 
+networks:
+    dmz: {}
