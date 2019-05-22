@@ -37,7 +37,7 @@ services:
             - "router"
         sysctls:
           - net.ipv4.ip_forward=1
-        command: bash -c "ip route add 172.111.0.0/16 via 198.13.0.1 && iptables -A OUTPUT -p tcp --tcp-flags RST RST -j DROP && tcpdump -SnntXX tcp & timeout 5 python3 /elocal/src/arp_poison.py -g tema3_router_1 -t tema3_server_1 & sleep infinity"
+        command: bash -c "ip route add 172.111.0.0/16 via 198.13.0.1 && iptables -A OUTPUT -p tcp --tcp-flags RST RST -j DROP && ping -c 1 tema3_server_1 && ping -c 1 tema3_router_1 && tcpdump -SnntXX tcp & timeout 5 python3 /elocal/src/arp_poison.py -g tema3_router_1 -t tema3_server_1 & sleep infinity"
     router:
         build:
             context: docker
